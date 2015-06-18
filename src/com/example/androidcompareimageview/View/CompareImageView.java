@@ -7,6 +7,7 @@
  */
 package com.example.androidcompareimageview.View;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,7 +40,7 @@ public class CompareImageView extends View {
 	int Width = 0;
 	int ScrollbarHeight = 70;
 	
-	float fadePercent = 100f;
+	float fadePercent = 50f;
 	float textSize = 72f;
 	
 	boolean isTouchingThumb = false;
@@ -99,6 +100,7 @@ public class CompareImageView extends View {
 		invalidate();
 	}
 	
+	
 	public void setTextSize(float value) {
 		textSize = value;
 		invalidate();
@@ -137,7 +139,7 @@ public class CompareImageView extends View {
 		Width = w;
 		thumb = new RectF(0,Height - ScrollbarHeight,140,Height);
 		scrollBar = new RectF(0,Height - ScrollbarHeight,Width,Height);
-		fadePercent = 100f;
+		fadePercent = 50f;
 		mainRect = new Rect(0,0,Width,Height);
 		fadeRect = new RectF(0,0, getPixelFromProcent(),Height);
 		
@@ -180,6 +182,42 @@ public class CompareImageView extends View {
         canvas.drawRect(scrollBar, scrollBarPaint);
         canvas.drawRect(thumb, thumbPaint);
         
+	}
+	
+	
+	//Will scale the view to fit the image when BOTH width and height is set to wrap_content
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+		 try {
+			 
+			 int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+			 int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+			 if (widthMode != MeasureSpec.AT_MOST && heightMode != MeasureSpec.AT_MOST) {
+				 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+				 return;
+			 }
+			 	
+		        if (imgBefore == null) {
+		            setMeasuredDimension(0, 0);
+		        } else {
+		            float imageSideRatio = (float)imgBefore.getWidth() / (float)imgBefore.getHeight();
+		            float viewSideRatio = (float)MeasureSpec.getSize(widthMeasureSpec) / (float)MeasureSpec.getSize(heightMeasureSpec);
+		            if (imageSideRatio >= viewSideRatio) {
+		                // Image is wider than the display (ratio)
+		                int width = MeasureSpec.getSize(widthMeasureSpec);
+		                int height = (int)(width / imageSideRatio);
+		                setMeasuredDimension(width, height);
+		            } else {
+		                // Image is taller than the display (ratio)
+		                int height = MeasureSpec.getSize(heightMeasureSpec);
+		                int width = (int)(height * imageSideRatio);
+		                setMeasuredDimension(width, height);
+		            }
+		        }
+		    } catch (Exception e) {
+		        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		    }
 	}
 	
 	private void ClearTempCan() {

@@ -11,6 +11,6 @@
     <com.example.androidcompareimageview.View.CompareImageView
         android:id="@+id/compareImageView1"
         android:layout_width="wrap_content"
-        android:layout_height="350dp" />
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
