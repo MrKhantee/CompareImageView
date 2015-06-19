@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+         <declare-styleable name="CompareImageView">
+        <attr name="beforeText" format="string"></attr>
+        <attr name="afterText" format="string"></attr>
+    </declare-styleable>
+    
+</resources>

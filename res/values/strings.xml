@@ -4,5 +4,7 @@
     <string name="app_name">AndroidCompareImageView</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="textBefore">Before</string>
+    <string name="textAfter">After</string>
 
 </resources>

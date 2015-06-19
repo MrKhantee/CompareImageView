@@ -9,6 +9,22 @@ package com.example.androidcompareimageview;
 
 public final class R {
     public static final class attr {
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int afterText=0x7f010001;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int beforeText=0x7f010000;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -36,5 +52,52 @@ public final class R {
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
+        public static final int textAfter=0x7f050004;
+        public static final int textBefore=0x7f050003;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a CompareImageView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #CompareImageView_afterText com.example.androidcompareimageview:afterText}</code></td><td></td></tr>
+           <tr><td><code>{@link #CompareImageView_beforeText com.example.androidcompareimageview:beforeText}</code></td><td></td></tr>
+           </table>
+           @see #CompareImageView_afterText
+           @see #CompareImageView_beforeText
+         */
+        public static final int[] CompareImageView = {
+            0x7f010000, 0x7f010001
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.example.androidcompareimageview.R.attr#afterText}
+          attribute's value can be found in the {@link #CompareImageView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.example.androidcompareimageview:afterText
+        */
+        public static final int CompareImageView_afterText = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.example.androidcompareimageview.R.attr#beforeText}
+          attribute's value can be found in the {@link #CompareImageView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.example.androidcompareimageview:beforeText
+        */
+        public static final int CompareImageView_beforeText = 0;
+    };
 }

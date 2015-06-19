@@ -8,8 +8,11 @@
 package com.example.androidcompareimageview.View;
 
 
+import com.example.androidcompareimageview.R;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,22 +22,24 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 @SuppressLint("DrawAllocation")
 public class CompareImageView extends View {
 	private static final String TAG = "CompareImageView";
+	String txtBefore = " ";
+	String txtAfter = " ";
+	
 	Bitmap imgBefore;
 	Bitmap imgAfter;
 	Bitmap imgTrans;
-	
 	
 	RectF thumb;
 	RectF scrollBar;
 	Rect mainRect;
 	RectF fadeRect;
-	
 	
 	int Height = 0;
 	int Width = 0;
@@ -57,12 +62,15 @@ public class CompareImageView extends View {
 	public CompareImageView(Context context) {
 		super(context);
 		initColors();
+		loadDefaultText(context);
 		// TODO Auto-generated constructor stub
 	}
 	
 	public CompareImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initColors();
+		loadDefaultText(context);
+		loadAttributes(context.obtainStyledAttributes(attrs, R.styleable.CompareImageView, 0, 0));
 		// TODO Auto-generated constructor stub
 	}
 
@@ -70,6 +78,8 @@ public class CompareImageView extends View {
 			int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		initColors();
+		loadDefaultText(context);
+		loadAttributes(context.obtainStyledAttributes(attrs, R.styleable.CompareImageView, defStyleAttr, 0));
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -88,6 +98,35 @@ public class CompareImageView extends View {
 	    textPaint = new Paint();
 	    textPaint.setColor(Color.WHITE);
 	    textPaint.setTextSize(72f);
+	}
+	
+	private void loadDefaultText(Context context) {
+		//We load this in case the developer has not defined this in the xml-layout
+		txtBefore = context.getResources().getString(R.string.textBefore);
+		txtAfter = context.getResources().getString(R.string.textAfter);
+	}
+	
+	private void loadAttributes(TypedArray attrs) {
+		txtBefore = attrs.hasValue(R.styleable.CompareImageView_beforeText) ? attrs.getString(R.styleable.CompareImageView_beforeText) : txtBefore;
+		txtAfter = attrs.hasValue(R.styleable.CompareImageView_afterText) ? attrs.getString(R.styleable.CompareImageView_afterText): txtAfter;
+	}
+	
+	public void setBeforeText(String text) {
+		txtBefore = text;
+		invalidate();
+	}
+	
+	public String getBeforeText() {
+		return txtBefore;
+	}
+	
+	public void setAfterText(String text) {
+		txtAfter = text;
+		invalidate();
+	}
+	
+	public String getAfterText() {
+		return txtAfter;
 	}
 	
 	public void setBeforeImage(Bitmap img) {
@@ -154,8 +193,10 @@ public class CompareImageView extends View {
         super.onDraw(canvas);
         ClearTempCan();
         if (imgBefore != null && imgAfter != null) {
+        	Log.e(TAG, "after     " + txtAfter);
+        	Log.e(TAG, "before    " + txtBefore);
         	canvas.drawBitmap(imgAfter, null, mainRect, null);
-        	canvas.drawText("After", 40, Height - (ScrollbarHeight * 2), textPaint);
+        	canvas.drawText(txtAfter, 40, Height - (ScrollbarHeight * 2), textPaint);
         	
         	/*
         	* We need to draw the top-most image in a different bitmap.
@@ -169,7 +210,7 @@ public class CompareImageView extends View {
         	* 
         	*/
         	tempCan.drawBitmap(imgBefore, null, mainRect, null);
-        	tempCan.drawText("Before", (Width - textPaint.measureText("Before")) - 40, Height - (ScrollbarHeight * 2), textPaint);
+        	tempCan.drawText(txtBefore, (Width - textPaint.measureText(txtBefore)) - 40, Height - (ScrollbarHeight * 2), textPaint);
         	tempCan.drawRect(fadeRect, transparentPaint);
         	
         	canvas.drawBitmap(imgTrans, 0, 0, dummyPaint);
