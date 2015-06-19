@@ -12,6 +12,7 @@ import com.example.androidcompareimageview.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -43,7 +45,8 @@ public class CompareImageView extends View {
 	
 	int Height = 0;
 	int Width = 0;
-	int ScrollbarHeight = 70;
+	int thumbSize = 20; //in dp;
+	int FadebarHeight = 17; //in dp
 	
 	float fadePercent = 50f;
 	float textSize = 72f;
@@ -158,14 +161,26 @@ public class CompareImageView extends View {
 		return fadePercent;
 	}
 	
+	/**
+	 * Sets the fadebar height
+	 * 
+	 * @param value Height in dp
+	 */
 	public void setFadebarHeight(int value) {
-		ScrollbarHeight = value;
+		FadebarHeight = value;
 		invalidate();
 	}
 	
 	public int getFadebarHeight() {
-		return ScrollbarHeight;
+		return FadebarHeight;
 	}
+	
+    private float Dip(int value) {
+    	Resources r = getResources();
+    	float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, r.getDisplayMetrics());
+    	return  px;
+
+    }
 	
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -176,8 +191,8 @@ public class CompareImageView extends View {
 
 		Height = h;
 		Width = w;
-		thumb = new RectF(0,Height - ScrollbarHeight,140,Height);
-		scrollBar = new RectF(0,Height - ScrollbarHeight,Width,Height);
+		thumb = new RectF(0,Height - Dip(FadebarHeight),Dip(thumbSize * 2),Height);
+		scrollBar = new RectF(0,Height - Dip(FadebarHeight),Width,Height);
 		fadePercent = 50f;
 		mainRect = new Rect(0,0,Width,Height);
 		fadeRect = new RectF(0,0, getPixelFromProcent(),Height);
@@ -193,10 +208,8 @@ public class CompareImageView extends View {
         super.onDraw(canvas);
         ClearTempCan();
         if (imgBefore != null && imgAfter != null) {
-        	Log.e(TAG, "after     " + txtAfter);
-        	Log.e(TAG, "before    " + txtBefore);
         	canvas.drawBitmap(imgAfter, null, mainRect, null);
-        	canvas.drawText(txtAfter, 40, Height - (ScrollbarHeight * 2), textPaint);
+        	canvas.drawText(txtAfter, 40, Height - (Dip(FadebarHeight) * 2), textPaint);
         	
         	/*
         	* We need to draw the top-most image in a different bitmap.
@@ -210,16 +223,16 @@ public class CompareImageView extends View {
         	* 
         	*/
         	tempCan.drawBitmap(imgBefore, null, mainRect, null);
-        	tempCan.drawText(txtBefore, (Width - textPaint.measureText(txtBefore)) - 40, Height - (ScrollbarHeight * 2), textPaint);
+        	tempCan.drawText(txtBefore, (Width - textPaint.measureText(txtBefore)) - 40, Height - (Dip(FadebarHeight) * 2), textPaint);
         	tempCan.drawRect(fadeRect, transparentPaint);
         	
         	canvas.drawBitmap(imgTrans, 0, 0, dummyPaint);
         }
-        
-        thumb.left = getPixelFromProcent() - 70;
-        thumb.right = getPixelFromProcent() + 70;
-        thumb.top = Height - ScrollbarHeight;
-        scrollBar.top = Height - ScrollbarHeight;
+        float thumbsize = Dip(thumbSize);
+        thumb.left = getPixelFromProcent() - thumbsize;
+        thumb.right = getPixelFromProcent() + thumbsize;
+        thumb.top = Height - Dip(FadebarHeight);
+        scrollBar.top = Height - Dip(FadebarHeight);
         canvas.drawRect(scrollBar, scrollBarPaint);
         canvas.drawRect(thumb, thumbPaint);
         
@@ -282,9 +295,10 @@ public class CompareImageView extends View {
 						invalidate();
 					}
 			} else if (action == MotionEvent.ACTION_DOWN) {
-				if (event.getY() > (Height - ScrollbarHeight) && event.getY() <= Height) {
+				if (event.getY() > (Height - Dip(FadebarHeight)) && event.getY() <= Height) {
+					float thumbsize = Dip(thumbSize);
 					//The user is touching the scrollbar area. Now we need to check if the user is touching the thumb or not.
-					if (event.getX() > (getPixelFromProcent() - 70) && event.getX() < (getPixelFromProcent() + 70)) {
+					if (event.getX() > (getPixelFromProcent() - thumbsize) && event.getX() < (getPixelFromProcent() + thumbsize)) {
 						//The user is touching the thumb, make if follow the movment
 						isTouchingThumb = true;
 					}
